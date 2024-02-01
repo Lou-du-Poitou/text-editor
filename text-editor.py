@@ -10,7 +10,7 @@ import hashlib
 # --- --- --- #
 app = tk.Tk()
 app.title("V / Lou du Poitou - Text Editor")
-app.geometry("411x450")
+app.geometry("428x450")
 app.resizable(False, False)
 app.overrideredirect(False)
 try:
@@ -27,9 +27,10 @@ class variables:
 def open_file():
     try:
         file = filedialog.askopenfile(mode="r", defaultextension=".txt")
-        text.config(state="normal")
-        text.delete("1.0", tk.END)
-        text.insert(tk.END, file.read())
+        if file:
+            text.config(state="normal")
+            text.delete("1.0", tk.END)
+            text.insert(tk.END, str(file.read()).rstrip())
         if variables.mode == False:
             text.config(state="disabled")
         variables.path = file.name
@@ -42,6 +43,7 @@ def save_file():
         file = filedialog.asksaveasfile(mode="w", defaultextension=".txt")
         file.write(str(text.get("0.0", tk.END)))
         variables.path = file.name
+        file.close()
     except:
         pass
     
@@ -79,6 +81,7 @@ def save():
         if variables.path != "":
             with open(variables.path, "w") as e:
                 e.write(str(text.get("0.0", tk.END)))
+            e.close()
     except:
         pass
     
@@ -131,7 +134,14 @@ text.place(x=0, y=25)
 text_cmd = tk.StringVar()
 
 cmd = tk.Entry(app, width="43", borderwidth="2", textvariable=text_cmd, fg="#00A505", font=tkFont.Font(weight="bold"), state="readonly", justify="center")
-cmd.place(x=9, y=418)
+cmd.place(x=9, y=421)
+
+scroll = tk.Scrollbar(app, command=text.yview, orient="vertical", borderwidth="2")
+
+text["yscrollcommand"] = scroll.set
+
+text.pack(fill=tk.NONE, expand=False, side=tk.LEFT)
+scroll.pack(fill=tk.Y, expand=True, side=tk.RIGHT)
 # --- --- --- #
 
 # --- --- --- #
