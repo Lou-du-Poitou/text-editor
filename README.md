@@ -2,4 +2,4 @@
 
 ***Text editor made with tkinter in python***
 
-***All rights reserved for the "icon.png" file***
+***All rights reserved for the "icon.png" and "icon.ico" files***
