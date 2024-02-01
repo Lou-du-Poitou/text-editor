@@ -34,8 +34,7 @@ def open_file():
             text.config(state="disabled")
         variables.path = file.name
         file.close()
-    except Exception as e:
-        print(e)
+    except:
         pass
     
 def save_file():
