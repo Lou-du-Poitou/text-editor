@@ -82,6 +82,15 @@ def save():
     except:
         pass
     
+def window():
+    try:
+        if app.attributes("-topmost"):
+            app.attributes("-topmost", False)
+        else:
+            app.attributes("-topmost", True)
+    except:
+        pass
+    
 def hash_file():
     try:
         with open(variables.path, "r") as e:
@@ -107,11 +116,14 @@ btn4.place(x=198, y=0)
 btn5 = tk.Button(app, text="Hash", height="1", width="8", bg="#DEDEDE", command=hash_file)
 btn5.place(x=264, y=0)
 
-exitbtn = tk.Button(app, text="✕", height="1", width="3", command=clear, bg="#ff0000")
-exitbtn.place(x=374, y=0)
+exitbtn = tk.Button(app, text="✕", height="1", width="2", command=clear, bg="#ff0000")
+exitbtn.place(x=358, y=0)
 
-savebtn = tk.Button(app, text="✓", height="1", width="3", command=save, bg="#00ff00")
-savebtn.place(x=336, y=0)
+savebtn = tk.Button(app, text="✓", height="1", width="2", command=save, bg="#00ff00")
+savebtn.place(x=332, y=0)
+
+windowbtn = tk.Button(app, text="↔", height="1", width="2", command=window, bg="#0000ff")
+windowbtn.place(x=384, y=0)
 
 text = tk.Text(app, bg="#ffffff", borderwidth="2", height="21", width="45", font=tkFont.Font(family="Arial", weight="normal"))
 text.place(x=0, y=25)
