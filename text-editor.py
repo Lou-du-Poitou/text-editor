@@ -3,20 +3,23 @@
 # --- --- --- #
 import tkinter as tk
 import tkinter.font as tkFont
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 import hashlib
 # --- --- --- #
 
 # --- --- --- #
 app = tk.Tk()
 app.title("V / Lou du Poitou - Text Editor")
-app.geometry("428x450")
-app.resizable(False, False)
+app.geometry("428x460")
+app.resizable(True, True)
 app.overrideredirect(False)
 try:
     app.iconbitmap(r"./icon.ico")
 except:
-    pass
+    import sys
+    app.iconbitmap(sys.executable)
+
+app.config(background="#DEDEDE")
 # --- --- --- #
 
 # --- --- --- #
@@ -49,9 +52,11 @@ def save_file():
     
 def new_file():
     try:
+        variables.path = ""
+        variables.mode = True
+        text_cmd.set("")
         text.config(state="normal")
         text.delete("1.0", tk.END)
-        variables.path = ""
     except:
         pass
     
@@ -68,9 +73,7 @@ def change_mode():
     
 def clear():
     try:
-        variables.path = ""
         variables.mode = True
-        text_cmd.set("")
         text.config(state="normal")
         text.delete("1.0", tk.END)
     except:
@@ -101,47 +104,53 @@ def hash_file():
         text_cmd.set(hash)
     except:
         pass
+    
+def message():
+    try:
+        if variables.path != "":
+            messagebox.showinfo("Path :", variables.path)
+    except:
+        pass
 # --- --- --- #
 
 # --- --- --- #
-btn1 = tk.Button(app, text="Open", height="1", width="8", bg="#DEDEDE", command=open_file)
-btn1.place(x=0, y=0)
+btn1 = tk.Button(app, text="Open", height="1", width="8", bg="#DEDEDE", command=open_file, borderwidth="1", activebackground="#C6F9C7")
+btn2 = tk.Button(app, text="Save", height="1", width="8", bg="#DEDEDE", command=save_file, borderwidth="1", activebackground="#C6F9C7")
+btn3 = tk.Button(app, text="New", height="1", width="8", bg="#DEDEDE", command=new_file, borderwidth="1", activebackground="#C6F9C7")
+btn4 = tk.Button(app, text="Mode", height="1", width="8", bg="#DEDEDE", command=change_mode, borderwidth="1", activebackground="#C6F9C7")
+btn5 = tk.Button(app, text="Hash", height="1", width="8", bg="#DEDEDE", command=hash_file, borderwidth="1", activebackground="#C6F9C7")
 
-btn2 = tk.Button(app, text="Save", height="1", width="8", bg="#DEDEDE", command=save_file)
-btn2.place(x=66, y=0)
+clearbtn = tk.Button(app, text="✕", height="1", width="2", command=clear, bg="#D72020", borderwidth="1", activebackground="#C6F9C7")
+savebtn = tk.Button(app, text="✓", height="1", width="2", command=save, bg="#20D720", borderwidth="1", activebackground="#C6F9C7")
+windowbtn = tk.Button(app, text="↔", height="1", width="2", command=window, bg="#2020D7", borderwidth="1", activebackground="#C6F9C7")
+hidebtn = tk.Button(app, text="", height="1", width="2", command=message, bg="#DEDEDE", borderwidth="1", activebackground="#C6F9C7")
 
-btn3 = tk.Button(app, text="New", height="1", width="8", bg="#DEDEDE", command=new_file)
-btn3.place(x=132, y=0)
-
-btn4 = tk.Button(app, text="Mode", height="1", width="8", bg="#DEDEDE", command=change_mode)
-btn4.place(x=198, y=0)
-
-btn5 = tk.Button(app, text="Hash", height="1", width="8", bg="#DEDEDE", command=hash_file)
-btn5.place(x=264, y=0)
-
-exitbtn = tk.Button(app, text="✕", height="1", width="2", command=clear, bg="#ff0000")
-exitbtn.place(x=358, y=0)
-
-savebtn = tk.Button(app, text="✓", height="1", width="2", command=save, bg="#00ff00")
-savebtn.place(x=332, y=0)
-
-windowbtn = tk.Button(app, text="↔", height="1", width="2", command=window, bg="#0000ff")
-windowbtn.place(x=384, y=0)
-
-text = tk.Text(app, bg="#ffffff", borderwidth="2", height="21", width="45", font=tkFont.Font(family="Arial", weight="normal"))
-text.place(x=0, y=25)
-
+text = tk.Text(app, bg="#ffffff", borderwidth="2", height="21", width="45", font=tkFont.Font(family="Arial", weight="normal"), undo=True)
 text_cmd = tk.StringVar()
-
 cmd = tk.Entry(app, width="43", borderwidth="2", textvariable=text_cmd, fg="#00A505", font=tkFont.Font(weight="bold"), state="readonly", justify="center")
-cmd.place(x=9, y=421)
-
-scroll = tk.Scrollbar(app, command=text.yview, orient="vertical", borderwidth="2")
+scroll = tk.Scrollbar(app, bg="#DEDEDE", command=text.yview, orient="vertical", borderwidth="2", relief="sunken")
 
 text["yscrollcommand"] = scroll.set
 
-text.pack(fill=tk.NONE, expand=False, side=tk.LEFT)
-scroll.pack(fill=tk.Y, expand=True, side=tk.RIGHT)
+app.grid_propagate(False)
+app.grid_rowconfigure(0, weight="1")
+app.grid_columnconfigure(0, weight="1")
+
+cmd.pack(side=tk.BOTTOM, expand=True, fill="x", padx="2", pady="2", anchor="s")
+
+btn1.pack(side=tk.LEFT, expand=True, fill="x", pady="3")
+btn2.pack(side=tk.LEFT, expand=True, fill="x", pady="3")
+btn3.pack(side=tk.LEFT, expand=True, fill="x", pady="3")
+btn4.pack(side=tk.LEFT, expand=True, fill="x", pady="3")
+btn5.pack(side=tk.LEFT, expand=True, fill="x", pady="3")
+
+savebtn.pack(side=tk.LEFT, expand=True, fill="x", pady="3")
+clearbtn.pack(side=tk.LEFT, expand=True, fill="x", pady="3")
+windowbtn.pack(side=tk.LEFT, expand=True, fill="x", pady="3")
+
+text.grid(row="0", column="0", sticky=tk.NSEW, pady=30)
+scroll.grid(row="0", column="1", sticky=tk.NSEW)
+hidebtn.pack(side=tk.LEFT, expand=False, fill="x", pady="3")
 # --- --- --- #
 
 # --- --- --- #
