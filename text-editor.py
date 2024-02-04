@@ -29,11 +29,10 @@ class variables:
 
 def open_file():
     try:
-        file = filedialog.askopenfile(mode="r", defaultextension=".txt")
-        if file:
+        with open(filedialog.askopenfilename(defaultextension=".txt"), "r", encoding="utf-8") as file:
             text.config(state="normal")
             text.delete("1.0", tk.END)
-            text.insert(tk.END, str(file.read()).rstrip())
+            text.insert(tk.END, file.read().rstrip())
         if variables.mode == False:
             text.config(state="disabled")
         variables.path = file.name
@@ -42,9 +41,9 @@ def open_file():
         pass
     
 def save_file():
-    try:
-        file = filedialog.asksaveasfile(mode="w", defaultextension=".txt")
-        file.write(str(text.get("0.0", tk.END)))
+    try: 
+        with open(filedialog.asksaveasfilename(defaultextension=".txt"), "w", encoding="utf-8") as file:
+            file.write(str(text.get("0.0", tk.END)))
         variables.path = file.name
         file.close()
     except:
@@ -82,9 +81,9 @@ def clear():
 def save():
     try:
         if variables.path != "":
-            with open(variables.path, "w") as e:
-                e.write(str(text.get("0.0", tk.END)))
-            e.close()
+            with open(variables.path, "w", encoding="utf-8") as file:
+                file.write(str(text.get("0.0", tk.END)))
+            file.close()
     except:
         pass
     
